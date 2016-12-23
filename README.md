@@ -1,4 +1,4 @@
-# Mastering-Text-Mining-with-R
+# Mastering Text Mining with R
 This is the code repository for [Mastering Text Mining with R](https://www.packtpub.com/big-data-and-business-intelligence/mastering-text-mining-r?utm_source=github&utm_medium=repository&utm_content=9781783551811), published by Packt. It contains all the supporting project files necessary to work through the book from start to finish.
 
 ##Instructions and Navigations
