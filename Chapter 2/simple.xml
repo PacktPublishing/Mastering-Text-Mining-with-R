@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog>
+	<book id="b1">
+		<author>Avinash Paul</author>
+		<title>Text Mining</title>
+		<genre>Computer</genre>
+		<price>100</price>
+	</book>
+	<book id="b2">
+		<author>Ashish Kumar</author>
+		<title>Advance Text Mining</title>
+		<genre>Computer</genre>
+		<price>200</price>
+	</book>
+</catalog>

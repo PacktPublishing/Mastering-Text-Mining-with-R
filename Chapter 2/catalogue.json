@@ -1,0 +1,20 @@
+{  
+   "catalog":{  
+      "book":[  
+         {  
+            "id":"b1",
+            "author":"Avinash Paul",
+            "title":"Text Mining",
+            "genre":"Computer",
+            "price":"100"
+         },
+         {  
+            "id":"b2",
+            "author":"Ashish Kumar",
+            "title":"Advance Text Mining",
+            "genre":"Computer",
+            "price":"200"
+         }
+      ]
+   }
+}
