@@ -20,4 +20,12 @@ R 3.3.2 is tested on the following platforms:
 *     SUSE Linux Enterprise Server 11
 *     Mavericks (10.9), Yosemite (10.10), El Capitan (10.11), Sierra (10.12)
 
+## Related Products:
+* [Machine Learning with R](https://www.packtpub.com/big-data-and-business-intelligence/machine-learning-r?utm_source=github&utm_medium=repository&utm_content=9781782162148)
 
+* [R Data Visualization Cookbook](https://www.packtpub.com/big-data-and-business-intelligence/r-data-visualization-cookbook?utm_source=github&utm_medium=repository&utm_content=9781783989508)
+
+* [Statistical Analysis with R](https://www.packtpub.com/big-data-and-business-intelligence/statistical-analysis-r?utm_source=github&utm_medium=repository&utm_content=9781849512084)
+
+###Suggestions and Feedback
+[Click here](https://docs.google.com/forms/d/e/1FAIpQLSe5qwunkGf6PUvzPirPDtuy1Du5Rlzew23UBp2S-P3wB-GcwQ/viewform) if you have any feedback or suggestions.
