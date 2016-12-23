@@ -1,0 +1,11 @@
+library(rJava)
+library(NLP)
+library(openNLP)
+simpleText <- "Text Mining is a interesting field. Mr. Paul Is a good programmer. He loves watching football. He lives in U.S.A."
+simpleText_str <- as.String(simpleText)
+sent_token_annotator <- Maxent_Sent_Token_Annotator(probs=TRUE)
+annotated_sentence <- annotate(simpleText_str,sent_token_annotator)
+word_token_annotator <- Maxent_Word_Token_Annotator(probs=TRUE)
+annotated_word <- annotate (simpleText_str, word_token_annotator, annotated_sentence)
+annotated_word
+simpleText_str[annotated_word]

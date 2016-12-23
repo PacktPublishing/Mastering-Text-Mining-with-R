@@ -1,0 +1,52 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
+import opennlp.tools.tokenize.TokenizerME;
+import opennlp.tools.tokenize.TokenizerModel;
+import opennlp.tools.util.InvalidFormatException;
+import opennlp.tools.util.Span;
+
+public class OrganizationFinder {
+	public static void main(String[] args) throws InvalidFormatException,
+			IOException {
+		findOrg();
+	}
+
+	private static void findOrg() throws InvalidFormatException, IOException {
+
+		String txt = "IBM is an MNC with headquarters in New York. Oracle is a cloud company in California. James works in IBM. Oracle hired John for cloud expertise. They give 100% to their profession";
+
+		InputStream token_is = new FileInputStream(
+				" \\openNLPdata\\models\\en-token.bin");
+		TokenizerModel token_model = new TokenizerModel(token_is);
+		token_is.close();
+		TokenizerME tokenizer = new TokenizerME(token_model);
+		InputStream sentence_is = new FileInputStream(
+				" \\openNLPdata\\models\\en-sent.bin");
+
+		SentenceModel sentence_model = new SentenceModel(sentence_is);
+		sentence_is.close();
+
+		SentenceDetectorME sdetector = new SentenceDetectorME(sentence_model);
+		InputStream org_is = new FileInputStream(
+				" \\openNLPmodels.en\\models\\en-ner-organization.bin");
+		TokenNameFinderModel org_model = new TokenNameFinderModel(org_is);
+		org_is.close();
+		NameFinderME nameFinder = new NameFinderME(org_model);
+		String sentences[] = sdetector.sentDetect(txt);
+		for (String sentence : sentences) {
+			String tokens[] = tokenizer.tokenize(sentence);
+			Span nameSpans[] = nameFinder.find(tokens);
+			for (Span sp : nameSpans) {
+				System.out.println(sp.toString());
+			}
+			System.out.println("Organization Found: "
+					+ Arrays.toString(Span.spansToStrings(nameSpans, tokens)));
+		}
+	}
+}

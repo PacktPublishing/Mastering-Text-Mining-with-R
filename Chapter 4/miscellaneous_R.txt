@@ -1,0 +1,5 @@
+# FACTORMINER
+
+library(FactoMineR)data<-replicate(10,rnorm(1000))result.pca = PCA(data[,1:9], scale.unit=TRUE, graph=T)print(result.pca)# AMAP
+Library(amapacp(data,center=TRUE,reduce=TRUE)#Additionally, weight vectors can also be provided as an argument . We can #perform a robust principal component analysis by using acpgen function in amap packageacpgen(data,h1,h2,center=TRUE,reduce=TRUE,kernel="gaussien") K(u,kernel="gaussien") W(x,h,D=NULL,kernel="gaussien") acprob(x,h,center=TRUE,reduce=TRUE,kernel="gaussien")pca_base<-prcomp(data)print(pca_base) pr_variance<- (pca_base$sdev^2/sum(pca_base$sdev^2))*100pr_variancecumsum(pr_variance)screeplot(pca_base)# RE-construction error
+loadings = t(pca_base$rotation[,1])scores = pca_base$x[,1]reconstruct_data = scores %*% loadings  + colMeans(data)

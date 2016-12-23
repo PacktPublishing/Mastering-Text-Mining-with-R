@@ -1,0 +1,31 @@
+library(ca)
+data(bitterling)
+data<-bitterling
+total <- sum(data)
+nrows <- nrow(data)
+ncols <- ncol(data)
+#dimensionality
+a <- min(ncol(data)-1, nrow(data)-1)
+labs<-c(1:a) #x- axis lables
+# create the contingency tables
+data_matrix<-as.matrix(data)
+# Add row column profile to contingency table
+data_rowsum<-addmargins(data_matrix,1)
+data_colsum<-addmargins(data_matrix,2)
+# Apply average rule ,to get number of dimensions
+col_dim<-round(100/(ncols-1), digits=1)
+row_dim<-round(100/(nrows-1), digits=1)
+thresh_dim<-(max(col_dim, row_dim))
+data_ca<- summary(ca(data))
+n_dim<- length(which(data_ca$scree[,3]>=thresh_dim))
+# Malinvaud's Test
+mal_ca<-CA(data, ncp=a, graph=FALSE)
+mal_trow <- a
+mal_tcol <- 6
+mal_out <-matrix(ncol= mal_tcol, nrow=mal_trow)
+names(mal_out) <- c("K", "Dimension", "Eigen value", "Chi-square", "df", "p value")
+mal_out[,1] <- c(0:(a-1))
+mal_out[,2] <- c(1:a)
+
+
+library(foreach)library(doParallel)cl <- makeCluster(4) # number of coresregisterDoParallel(cl)foreach(i = 1:mal_trow) %dopar% {  k <- -1+i  mal_out[i,3] <- mal_ca$eig[i,1]  mal_out[i,5] <- (nrows-k-1)*(ncols-k-1)}mal_out[,4] <- rev(cumsum(rev(mal_out[,3])))*totalmal_out[,6] <- round(pchisq(mal_out[,4], mal_out[,5], lower.tail=FALSE), digits=6)optimal.dimensionality <- length(which(mal_out[,6]<=0.05))# plot bar chart of correlation between rows and columns, and add reference linedev.new()perf_corr<-(1.0)sqr.trace<-round(sqrt(sum(data_ca$scree[,2])), digits=3)barplot(c(perf_corr, sqr.trace), main="Correlation coefficient between rows & columns (=square root of the inertia)", sub="reference line: threshold of important correlation ", ylab="correlation coeff.", names.arg=c("correlation coeff. range", "correlation coeff. bt rows & cols"), cex.main=0.80, cex.sub=0.80, cex.lab=0.80)abline(h=0.20)barplot(data_ca$scree[,3], xlab="Dimensions", ylab="% of Inertia", names.arg=data_ca$scree[,1])abline(h=thresh.sig.dim)title (main="Percentage of inertia attributed to the dimensions", sub="ref line: threshold of an optimal dimensionality of the solution, according to the average rule", cex.main=0.80, cex.sub=0.80)plot(mal_out[,6], type="o", xaxt="n", xlim=c(1, a), xlab="Dimensions", ylab="p value")axis(1, at=labs, labels=sprintf("%.0f",labs))title(main="Malinvaud's test Plot", sub="dashed line: alpha 0.05 threshold", col.sub="RED", cex.sub=0.80)abline(h=0.05, lty=2, col="RED")userow_dimensionality <- 3dims.to.be.plotted <- userow_dimensionality # CA analysis by Greenacre's package to be used later on for the Standard Biplotsres.ca <- ca(data, nd=dims.to.be.plotted)str(res.ca)# CA output as dataframe to be used for the some graphs to comecadataframe<-summary(ca(data, nd=dims.to.be.plotted))# plot the quality of the display of categories on successive pairs of dimensions#row categoriesdev.new()counter <- 1for(i in seq(9, ncol(cadataframe$rows), 3)){    counter <- counter +1  quality.rows <- (cadataframe$rows[,6]+cadataframe$rows[,i])/10  barplot(quality.rows, ylim=c(0,100), xlab="Row categories", ylab=paste("Quality of the display (% of inertia) on Dim. 1+", counter), names.arg=cadataframe$rows[,1], cex.lab=0.80)}#column categoriesdev.new()counter <- 1for(i in seq(9, ncol(cadataframe$columns), 3)){	  counter <- counter +1  quality.cols <- (cadataframe$columns[,6]+cadataframe$columns[,i])/10  barplot(quality.cols, ylim=c(0,100), xlab="Column categories", ylab=paste("Quality of the display (% of inertia) on Dim. 1+", counter), names.arg=cadataframe$columns[,1], cex.lab=0.80)}# charts of categories contribution# plot bar charts of contribution of row categories to the axes, and add a reference linedev.new()counter <- 0for(i in seq(7, ncol(cadataframe$rows), 3)){	  counter <- counter +1  barplot(cadataframe$rows[,i], ylim=c(0,1000), xlab="Row categories", ylab=paste("Contribution to Dim. ",counter," (in permills)"), names.arg=cadataframe$rows[,1], cex.lab=0.80)  abline(h=round(((100/nrows)*10), digits=0))}# plot bar charts of contribution of column categories to the axes, and add a reference linedev.new()dev.new()counter <- 0for(i in seq(7, ncol(cadataframe$columns), 3)){	  counter <- counter +1  barplot(cadataframe$columns[,i], ylim=c(0,1000), xlab="Column categories", ylab=paste("Contribution to Dim. ",counter," (in permills)"), names.arg=cadataframe$columns[,1], cex.lab=0.80)  abline(h=round(((100/ncols)*10), digits=0))}# let us estimate the correlation of categories to dimensions# row categoriesdev.new()counter <- 0for(i in seq(6, ncol(cadataframe$rows), 3)){	  counter <- counter +1  correl.rows <- round(sqrt((cadataframe$rows[,i]/1000)), digits=3)  barplot(correl.rows, ylim=c(0,1), xlab="Row categories", ylab=paste("Correlation with Dim. ", counter), names.arg=cadataframe$rows[,1], cex.lab=0.80)}#column categoriesdev.new()counter <- 0for(i in seq(6, ncol(cadataframe$columns), 3)){	  counter <- counter +1  correl.cols <- round(sqrt((cadataframe$columns[,i]/1000)), digits=3)  barplot(correl.cols, ylim=c(0,1), xlab="Column categories", ylab=paste("Correlation with Dim. ", counter), names.arg=cadataframe$columns[,1], cex.lab=0.80)}  #let us check the Contingency Tableprint(addmargins(data_matrix))# Association coefficients can be estimated by library(vcd)print(assocstats(data_matrix))

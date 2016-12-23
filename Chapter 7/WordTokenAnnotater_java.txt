@@ -1,0 +1,30 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import opennlp.tools.tokenize.Tokenizer;
+import opennlp.tools.tokenize.TokenizerME;
+import opennlp.tools.tokenize.TokenizerModel;
+import opennlp.tools.util.InvalidFormatException;
+
+public class WordTokenizer {
+	public static void main(String[] args) throws InvalidFormatException,
+			IOException {
+
+		Tokenize();
+	}
+
+	public static void Tokenize() throws InvalidFormatException, IOException {
+		String text = "Text Mining is a interesting field. Mr. Paul Is a good programmer. He loves watching football. He lives in U.S.A.";	
+		the pre- trained model provided by Apache OpenNLP
+		InputStream is = new FileInputStream("C:\\Users\\avia.ORADEV\\Documents\\R\\win-library\\3.1\\openNLPdata\\models\\en-token.bin"); 
+		TokenizerModel model = new TokenizerModel(is);	 
+		Tokenizer tokenizer = new TokenizerME(model);
+		String tokens[] = tokenizer.tokenize(text);
+		 
+		for (String token : tokens){
+			System.out.println(token);
+		}
+	 
+		is.close();
+	}
+}

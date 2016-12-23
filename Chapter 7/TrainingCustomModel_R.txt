@@ -1,0 +1,7 @@
+install.packages('rJava')
+library(rJava)
+.jinit()
+.jaddClassPath(dir( "D:/R/testjars", full.names=TRUE ))
+.jclassPath()
+trainer <- .jnew( "com/train/TrainPerson" )
+.jcall(trainer, "V" , "writePersonModel" , "\\OpenNLP\\test.train" , "\\OpenNLP\\ en-ner-person_custom.bin")

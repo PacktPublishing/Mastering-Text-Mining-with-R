@@ -1,0 +1,19 @@
+library(rJava)
+library(NLP)
+library(openNLP)
+
+text <- "James Bond works for a start-up. John was born in London"
+
+text_str <- as.String(text)
+
+sent_token_annotator <- Maxent_Sent_Token_Annotator()
+
+word_token_annotator <- Maxent_Word_Token_Annotator()
+
+annotated_str <- annotate(text_str, list(sent_token_annotator, word_token_annotator))
+
+entity_annotator_person <-Maxent_Entity_Annotator(language = "en", kind = "person", probs = FALSE, model = NULL)
+
+annotatedVal <- annotate(text_str, entity_annotator_person, annotated_str)
+
+annotatedVal

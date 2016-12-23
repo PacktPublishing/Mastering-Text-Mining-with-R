@@ -1,0 +1,22 @@
+library(rJava)
+library(NLP)
+library(openNLP)
+
+s <- "Avinash Paul works for a start-up. Anusha was born in London"
+
+s <- as.String(s)
+
+sent_token_annotator <- Maxent_Sent_Token_Annotator()
+word_token_annotator <- Maxent_Word_Token_Annotator()
+
+annotated_str <- annotate(s, list(sent_token_annotator, word_token_annotator))
+
+model <- system.file("models", "en-ner-person_custom.bin", package = "openNLPmodels.en")
+
+entity_annotator_person_custom <-Maxent_Entity_Annotator(language = "en", kind = "person", probs = FALSE, model = model)
+
+annotatedVal <- annotate(s, entity_annotator_person_custom, annotated_str)
+
+annotatedVal
+s[annotatedVal]
+getEntityValuesByKind(annotatedVal_txt, kind = "person")

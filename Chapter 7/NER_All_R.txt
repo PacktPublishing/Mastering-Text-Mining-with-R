@@ -1,0 +1,43 @@
+library(rJava)
+library(NLP)
+library(openNLP)
+txt <- "IBM is an MNC with headquarters in New York. Oracle is a cloud company in California. James Bond works in IBM. Oracle hired John for cloud expertise. 
+They give 100% to their profession . Both earn $500000 a year"
+
+txt_str <- as.String(txt)
+
+sent_token_annotator <- Maxent_Sent_Token_Annotator()
+
+word_token_annotator <- Maxent_Word_Token_Annotator()
+
+annotated_str <- annotate(txt_str, list(sent_token_annotator, word_token_annotator))
+entity_annotator_org <-Maxent_Entity_Annotator(language = "en", kind = "organization", probs = FALSE, model = NULL)
+
+entity_annotator_person <-Maxent_Entity_Annotator(language = "en", kind = "person", probs = FALSE, model = NULL)
+
+entity_annotator_money <-Maxent_Entity_Annotator(language = "en", kind = "money", probs = FALSE, model = NULL)
+
+entity_annotator_location <-Maxent_Entity_Annotator(language = "en", kind = "location", probs = FALSE, model = NULL)
+
+entity_annotator_percentage <-Maxent_Entity_Annotator(language = "en", kind = "percentage", probs = FALSE, model = NULL)
+annotator_list <- list(entity_annotator_person,entity_annotator_org,entity_annotator_money,entity_annotator_location,entity_annotator_percentage)
+annotated_val <- annotate(txt_str, annotator_list, annotated_str)
+Txt_str[annotated_val]
+annotatedVal_txt <- AnnotatedPlainTextDocument(txt_str , annotated_val)
+
+getEntityValuesByKind <- function (annotatedTextDoc, kind){
+ text_content <- annotatedTextDoc$content
+  annotation_data <- annotations(annotatedTextDoc)[[1]]
+    if(hasArg(kind)) {
+	 data_with_features <- sapply(annotation_data$features, `[[`, "kind")
+	 text_content[annotation_data[data_with_features == kind]]
+	} else {
+	 text_content[annotation_data[annotation_data$type == "entity"]]
+	}
+}
+
+getEntityValuesByKind(annotatedVal_txt, kind = "person")
+getEntityValuesByKind(annotatedVal_txt,  kind ="organization")
+getEntityValuesByKind(annotatedVal_txt,  kind ="money")
+getEntityValuesByKind(annotatedVal_txt,  kind ="location")
+getEntityValuesByKind(annotatedVal_txt,  kind ="percentage")

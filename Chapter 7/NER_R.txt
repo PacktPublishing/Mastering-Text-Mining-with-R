@@ -1,0 +1,12 @@
+library(rJava)
+library(NLP)
+library(openNLP)
+txt <- " IBM is an MNC with headquarters in New York. Oracle is a cloud company in California. James works in IBM. Oracle hired John for cloud expertise. They give 100% to their profession"
+txt_str <- as.String(txt)
+sent_token_annotator <- Maxent_Sent_Token_Annotator()
+word_token_annotator <- Maxent_Word_Token_Annotator()
+annotated_str <- annotate(txt_str, list(sent_token_annotator, word_token_annotator))
+entity_annotator_org <-Maxent_Entity_Annotator(language = "en", kind = "organization", probs = FALSE, model = NULL)
+annotated_org_val <- annotate(txt_str, entity_annotator_org, annotated_str)
+annotated_org_val
+txt_str[annotated_org_val]

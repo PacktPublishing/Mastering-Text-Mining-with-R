@@ -1,0 +1,29 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
+import opennlp.tools.util.InvalidFormatException;
+
+public class SentenceDetector {
+
+	public static void DetectSentence() throws InvalidFormatException,
+			IOException {
+
+		String text = "Text Mining is a interesting field. Mr. Paul Is a good programmer. He loves watching football. He lives in U.S.A.";
+		InputStream is = new FileInputStream("en-sent.bin");
+		SentenceModel model = new SentenceModel(is);
+		SentenceDetectorME sdetector = new SentenceDetectorME(model);
+		String sentences[] = sdetector.sentDetect(text);
+		for (String sentence : sentences) {
+			System.out.println(sentences);
+
+		}
+		is.close();
+	}
+
+	public static void main(String[] args) throws InvalidFormatException,
+			IOException {
+		DetectSentence();
+	}
+}
